@@ -20,7 +20,8 @@ export class HomePage {
   subredditControl: FormControl;
 
   constructor(public dataService: DataProvider, public redditService: RedditProvider, 
-	      public modalCtrl: ModalController, public platform: Platform, public keyboard: Keyboard) {
+	      public modalCtrl: ModalController, public platform: Platform, 
+	      public keyboard: Keyboard, public iab: InAppBrowser) {
 
       this.subredditControl = new FormControl();
 
@@ -51,10 +52,12 @@ export class HomePage {
   loadSettings(): void {
 
       console.log("TODO:  loadSettings()");
+      this.redditService.fetchData();
   }
 
   showComments(post): void {
       console.log("TODO:  showComments()");
+      let browser = this.iab.create('http://reddit.com' + post.data.permalink, '_system');
   }
 
   openSettings(): void {
@@ -63,14 +66,42 @@ export class HomePage {
 
   playVideo(e, post): void {
       console.log("TODO: playVideo()");
+
+    //Create a reference to the video
+    let video = e.target;
+
+    if(!post.alreadyLoaded){
+      post.showLoader = true;     
+    }
+
+    //Toggle the video playing
+    if(video.paused){
+
+      //Show the loader gif
+      video.play();
+
+      //Once the video starts playing, remove the loader gif
+      video.addEventListener("playing", (e) => {
+        post.showLoader = false;
+        post.alreadyLoaded = true;
+      });
+
+    } else {
+      video.pause();
+    }
+    
+
+
   }
 
   changeSubreddit(): void {
       console.log("TODO: changeSubreddit()");
+      this.redditService.resetPosts();
   }
 
   loadMore(): void {
       console.log("TODO: loadMore()");
+      this.redditService.nextPage();
   }
 
 }
