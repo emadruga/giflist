@@ -66,16 +66,17 @@ export class RedditProvider {
 
               //If a preview image is available, assign it to the post as 'snapshot'
           if(typeof(post.data.preview) != "undefined"){
-            this.posts[i].data.snapshot = post.data.preview.images[0].source.url.replace(/&amp;/g, '&');
-
-                //If the snapshot is undefined, change it to be blank so it doesnt use a broken image
-            if(this.posts[i].data.snapshot == "undefined"){
-              this.posts[i].data.snapshot = "";
+              this.posts[i].data.snapshot = post.data.preview.images[0].source.url.replace(/&amp;/g, '&');
+	      console.log(post);
+	      
+              //If the snapshot is undefined, change it to be blank so it doesnt use a broken image
+              if(this.posts[i].data.snapshot == "undefined"){
+		  this.posts[i].data.snapshot = "";
+              }
+          }
+            else {
+		this.posts[i].data.snapshot = "";
             }
-          }
-          else {
-            this.posts[i].data.snapshot = "";
-          }
         }
         else {
           this.posts.splice(i, 1);
